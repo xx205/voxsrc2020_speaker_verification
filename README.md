@@ -28,9 +28,9 @@
 * Export trained checkpoint to pb file for inference: ``bash export_inference_model.sh models.tdnn_model tdnn exp/voxceleb2_dev/tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs 2 40 cm_linear_voxsrc2020/kernel``
 * Evaluate model performance on VoxCeleb1 Test/Extended/Hard trials: ``bash eval_inference_model.sh exp/voxceleb2_dev/tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_122636.pb 2 40``
 
-# Experiment results with VoxSRC 2020 Team xx205's settings
+# Experiment results with VoxSRC 2020 Team xx205's settings and 40-dimensional FBANK input features
 
-* Train on VoxCeleb1 dev, evaluate on VoxCeleb1 Test, cosine scoring 
+* Train on VoxCeleb1 dev with augmentation, evaluate on VoxCeleb1 Test, cosine scoring 
     |                                                                               | Test           | num params |
     |-------------------------------------------------------------------------------|----------------|------------|
     | dpn68_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_16675_embeddings | 2.0894%/0.2544 | 13925494 (13.9M)   |
@@ -44,9 +44,9 @@
     | res2net50_w24_s4_c64_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_122636_embeddings | 0.9942%/0.1163 | 0.9924%/0.1152 | 1.8387%/0.1857 | 26925168 (26.9M) |
     | + snorm                                                                                       | 0.8400%/0.0931 | 0.9051%/0.0970 | 1.5976%/0.1471 |                  |
 
-# Experiment results with VoxSRC 2020 Team JTBD's settings
+# Experiment results with VoxSRC 2020 Team JTBD's settings and 40-dimensional FBANK input features
 
-* Train on VoxCeleb2 dev, evaluate on VoxCeleb1 Test / Extended / Hard
+* Train on VoxCeleb2 dev with augmentation, evaluate on VoxCeleb1 Test / Extended / Hard
     |                                                                                              | Test           | Extended       | Hard           | num params       |
     |----------------------------------------------------------------------------------------------|----------------|----------------|----------------|------------------|
     | dpn68_sc_cm_linear_frames200_scale32_margin0.2_8GPUs_122636_embeddings                       | 1.0952%/0.1052 | 1.1725%/0.1322 | 2.0998%/0.2053 | 13925494 (13M)   |
@@ -62,7 +62,7 @@
 
 # Experiment results with VoxSRC 2020 Team JTBD's settings and 80-dimensional FBANK input features
 
-* Train on VoxCeleb2 dev, evaluate on VoxCeleb1 Test / Extended / Hard
+* Train on VoxCeleb2 dev with augmentation, evaluate on VoxCeleb1 Test / Extended / Hard
     |                                                                                                   | Test           | Extended       | Hard           | num params       |
     |---------------------------------------------------------------------------------------------------|----------------|----------------|----------------|------------------|
     | res2net50_w24_s4_c64_sc_cm_linear_frames200_scale32_margin0.2_8GPUs_122636_embeddings             | 0.9304%/0.0855 | 1.0345%/0.1109 | 1.8228%/0.1777 | 32209008 (32.2M) |
