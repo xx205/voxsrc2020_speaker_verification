@@ -36,7 +36,7 @@
     | dpn68_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_16675_embeddings | 2.0894%/0.2544 | 13925494 (13.9M)   |
     | tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_16675_embeddings  | 3.4398%/0.3339 | 3524096 (3.5M)   |
 
-* Train on VoxCeleb2 dev, evaluate on VoxCeleb1 Test / Extended / Hard
+* Train on VoxCeleb2 dev with augmentation, evaluate on VoxCeleb1 Test / Extended / Hard
     |                                                                                               | Test           | Extended       | Hard           | num params       |
     |-----------------------------------------------------------------------------------------------|----------------|----------------|----------------|------------------|
     | dpn68_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_16675_embeddings                 | 0.9517%/0.0884 | 1.0217%/0.1125 | 1.8649%/0.1833 | 13925494 (13.9M) |
