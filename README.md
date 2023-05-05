@@ -163,33 +163,33 @@
 ## 4. VoxCeleb2_dev_aug as training data, 80-d FBANK features, LMFT on VoxCeleb2_dev
 
 ### Model configurations
-| model                      | loss function | subcenter | sample length | margin     | # parameters | pooling function |
-|----------------------------|---------------|-----------|---------------|------------|--------------|------------------|
-| res2net50_w24_s4_c64       | sc_cm_linear  | ✓         | 200           | 0.2        | 32.2 M       | Stats Pool       |
-| res2net50_w24_s4_c64+LMFT  | sc_cm_linear  | ✓         | 600           | 0.4        | 32.2 M       | Stats Pool       |
-| res2net101_w24_s4_c32      | sc_cm_linear  | ✓         | 200           | 0.2        | 29.3 M       | Att Stats Pool   |
-| res2net101_w24_s4_c32+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 29.3 M       | Att Stats Pool   |
-| res2net152_w24_s4_c32      | sc_cm_linear  | ✓         | 200           | 0.2        | 32.9 M       | Att Stats Pool   |
-| res2net152_w24_s4_c32+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 32.9 M       | Att Stats Pool   |
-| res2net200_w24_s4_c32      | sc_cm_linear  | ✓         | 200           | 0.2        | 35.5 M       | Att Stats Pool   |
-| res2net200_w24_s4_c32+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 35.5 M       | Att Stats Pool   |
+| model                          | loss function | subcenter | sample length | margin     | # parameters | pooling function |
+|--------------------------------|---------------|-----------|---------------|------------|--------------|------------------|
+| res2net50_w24_s4_c64           | sc_cm_linear  | ✓         | 200           | 0.2        | 32.2 M       | Stats Pool       |
+| res2net50_w24_s4_c64+LMFT      | sc_cm_linear  | ✓         | 600           | 0.4        | 32.2 M       | Stats Pool       |
+| res2net101_w24_s4_c32_att      | sc_cm_linear  | ✓         | 200           | 0.2        | 29.3 M       | Att Stats Pool   |
+| res2net101_w24_s4_c32_att+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 29.3 M       | Att Stats Pool   |
+| res2net152_w24_s4_c32_att      | sc_cm_linear  | ✓         | 200           | 0.2        | 32.9 M       | Att Stats Pool   |
+| res2net152_w24_s4_c32_att+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 32.9 M       | Att Stats Pool   |
+| res2net200_w24_s4_c32_att      | sc_cm_linear  | ✓         | 200           | 0.2        | 35.5 M       | Att Stats Pool   |
+| res2net200_w24_s4_c32_att+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 35.5 M       | Att Stats Pool   |
 
 ### Results on VoxCeleb1_Test/Extended/Hard, VoxSRC2022_dev
-|                                     | Vox1_Test<br>(EER/minDCF0.01) | Extended<br>(EER/minDCF0.01) | Hard<br>(EER/minDCF0.01) | VoxSRC2022_dev<br>(EER/minDCF0.05) |
-|-------------------------------------|-------------------------------|------------------------------|--------------------------|------------------------------------|
-| res2net50_w24_s4_c64 (cosine)       | 0.9304%/0.0855                | 1.0345%/0.1109               | 1.8228%/0.1777           | |
-| res2net50_w24_s4_c64 (asnorm)       | 0.7656%/0.0662                | 0.8989%/0.0964               | 1.5381%/0.1423           | |
-| res2net50_w24_s4_c64+LMFT (cosine)  | 0.7762%/0.0702                | 0.8589%/0.0933               | 1.5236%/0.1506           | |
-| res2net50_w24_s4_c64+LMFT (asnorm)  | 0.6805%/0.0579                | 0.8024%/0.0827               | 1.3703%/0.1210           | |
-| res2net101_w24_s4_c32 (cosine)      | 0.6539%/0.0655                | 0.7837%/0.0823               | 1.4125%/0.1395           | |
-| res2net101_w24_s4_c32 (asnorm)      | 0.5742%/0.0664                | 0.7230%/0.0749               | 1.2679%/0.1187           | |
-| res2net101_w24_s4_c32+LMFT (cosine) | 0.5795%/0.0512                | 0.6526%/0.0677               | 1.2099%/0.1174           | |
-| res2net101_w24_s4_c32+LMFT (asnorm) | 0.5210%/0.0534                | 0.6081%/0.0618               | 1.0940%/0.0999           | |
-| res2net152_w24_s4_c32 (cosine)      | 0.5476%/0.0507                | 0.7313%/0.0811               | 1.3453%/0.1331           | |
-| res2net152_w24_s4_c32 (asnorm)      | 0.4891%/0.0530                | 0.6754%/0.0729               | 1.1957%/0.1101           | |
-| res2net152_w24_s4_c32+LMFT (cosine) | 0.4732%/0.0425                | 0.6516%/0.0676               | 1.1957%/0.1119           | |
-| res2net152_w24_s4_c32+LMFT (asnorm) | 0.4572%/0.0463                | 0.6099%/0.0587               | 1.0737%/0.0965           | |
-| res2net200_w24_s4_c32 (cosine)      | 0.4944%/0.0418                | 0.7137%/0.0780               | 1.2897%/0.1267           | |
-| res2net200_w24_s4_c32 (asnorm)      | 0.4200%/0.0501                | 0.6658%/0.0690               | 1.1496%/0.1019           | |
-| res2net200_w24_s4_c32+LMFT (cosine) | 0.4041%/0.0390                | 0.6330%/0.0672               | 1.1641%/0.1113           | |
-| res2net200_w24_s4_c32+LMFT (asnorm) | 0.3668%/0.0388                | 0.5930%/0.0581               | 1.0330%/0.0912           | 1.5017/0.0974 |
+|                                         | Vox1_Test<br>(EER/minDCF0.01) | Extended<br>(EER/minDCF0.01) | Hard<br>(EER/minDCF0.01) | VoxSRC2022_dev<br>(EER/minDCF0.05) |
+|-----------------------------------------|-------------------------------|------------------------------|--------------------------|------------------------------------|
+| res2net50_w24_s4_c64 (cosine)           | 0.9304%/0.0855                | 1.0345%/0.1109               | 1.8228%/0.1777           | |
+| res2net50_w24_s4_c64 (asnorm)           | 0.7656%/0.0662                | 0.8989%/0.0964               | 1.5381%/0.1423           | |
+| res2net50_w24_s4_c64+LMFT (cosine)      | 0.7762%/0.0702                | 0.8589%/0.0933               | 1.5236%/0.1506           | |
+| res2net50_w24_s4_c64+LMFT (asnorm)      | 0.6805%/0.0579                | 0.8024%/0.0827               | 1.3703%/0.1210           | |
+| res2net101_w24_s4_c32_att (cosine)      | 0.6539%/0.0655                | 0.7837%/0.0823               | 1.4125%/0.1395           | |
+| res2net101_w24_s4_c32_att (asnorm)      | 0.5742%/0.0664                | 0.7230%/0.0749               | 1.2679%/0.1187           | |
+| res2net101_w24_s4_c32_att+LMFT (cosine) | 0.5795%/0.0512                | 0.6526%/0.0677               | 1.2099%/0.1174           | |
+| res2net101_w24_s4_c32_att+LMFT (asnorm) | 0.5210%/0.0534                | 0.6081%/0.0618               | 1.0940%/0.0999           | |
+| res2net152_w24_s4_c32_att (cosine)      | 0.5476%/0.0507                | 0.7313%/0.0811               | 1.3453%/0.1331           | |
+| res2net152_w24_s4_c32_att (asnorm)      | 0.4891%/0.0530                | 0.6754%/0.0729               | 1.1957%/0.1101           | |
+| res2net152_w24_s4_c32_att+LMFT (cosine) | 0.4732%/0.0425                | 0.6516%/0.0676               | 1.1957%/0.1119           | |
+| res2net152_w24_s4_c32_att+LMFT (asnorm) | 0.4572%/0.0463                | 0.6099%/0.0587               | 1.0737%/0.0965           | |
+| res2net200_w24_s4_c32_att (cosine)      | 0.4944%/0.0418                | 0.7137%/0.0780               | 1.2897%/0.1267           | |
+| res2net200_w24_s4_c32_att (asnorm)      | 0.4200%/0.0501                | 0.6658%/0.0690               | 1.1496%/0.1019           | |
+| res2net200_w24_s4_c32_att+LMFT (cosine) | 0.4041%/0.0390                | 0.6330%/0.0672               | 1.1641%/0.1113           | |
+| res2net200_w24_s4_c32_att+LMFT (asnorm) | 0.3668%/0.0388                | 0.5930%/0.0581               | 1.0330%/0.0912           | 1.5017/0.0974 |
