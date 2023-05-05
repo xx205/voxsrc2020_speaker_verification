@@ -228,14 +228,26 @@ class Model(object):
         return inputs
 
 
-res2net50_w24_s4 = Model(resnet_size=50, bottleneck=True, num_filters=[64, 128, 256, 512], output_dim=256,
-                         kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
-                         block_sizes=[3,4,6,3], block_strides=[1,2,2,2],
-                         resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
-                         temporal_pool=stats_pool)
+res2net50_w24_s4_c64 = Model(resnet_size=50, bottleneck=True, num_filters=[64, 128, 256, 512], output_dim=256,
+                             kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
+                             block_sizes=[3,4,6,3], block_strides=[1,2,2,2],
+                             resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
+                             temporal_pool=stats_pool)
 
 res2net101_w24_s4_c32_att = Model(resnet_size=101, bottleneck=True, num_filters=[32, 64, 128, 256], output_dim=256,
                                   kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
                                   block_sizes=[3,4,23,3], block_strides=[1,2,2,2],
                                   resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
-                                  temporal_pool=stats_pool)
+                                  temporal_pool=att_stats_pool)
+
+res2net152_w24_s4_c32_att = Model(resnet_size=152, bottleneck=True, num_filters=[32, 64, 128, 256], output_dim=256,
+                                  kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
+                                  block_sizes=[3,8,36,3], block_strides=[1,2,2,2],
+                                  resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
+                                  temporal_pool=att_stats_pool)
+
+res2net200_w24_s4_c32_att = Model(resnet_size=200, bottleneck=True, num_filters=[32, 64, 128, 256], output_dim=256,
+                                  kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
+                                  block_sizes=[3,24,36,3], block_strides=[1,2,2,2],
+                                  resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
+                                  temporal_pool=att_stats_pool)

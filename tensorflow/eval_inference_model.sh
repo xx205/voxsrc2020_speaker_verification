@@ -2,7 +2,6 @@
 
 model=${1:-"exp/voxceleb2_dev/tdnn_length320_cm_linear_voxsrc2020_scale32.0_margin0.2_8GPUs_122636.pb"}
 expansion_dim=${2:-2}
-fbank_dim=40
 
 # Number of GPUs for training and evaluation
 num_gpus=`nvidia-smi -L | wc -l`
@@ -10,7 +9,6 @@ num_gpus=`nvidia-smi -L | wc -l`
 dir=`pwd`/${model%.pb}_embeddings
 
 for dataset in voxceleb2_dev voxceleb1; do
-# for dataset in voxceleb1; do
     mkdir -p ${dir}/${dataset}
     for i in `seq 1 ${num_gpus}`; do
 		export CUDA_VISIBLE_DEVICES=$(($i - 1))
@@ -26,7 +24,6 @@ for dataset in voxceleb2_dev voxceleb1; do
 done
 
 for testset in T E H; do
-# for testset in T; do
     python3 snorm.py \
 	    --trial ../data/voxceleb1_trials/list_test_${testset}.txt \
 	    --test_ark ${dir}/voxceleb1/xvector.ark \
@@ -38,7 +35,6 @@ done
 wait
 
 for testset in T E H; do
-# for testset in T; do
     python3 eer_minDCF.py \
 	    --trial ../data/voxceleb1_trials/list_test_${testset}.txt \
 	    --score ${dir}/voxceleb1/cosine_${testset}.txt
