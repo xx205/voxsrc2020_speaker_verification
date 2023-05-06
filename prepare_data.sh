@@ -224,14 +224,6 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     shard_scp ${dataset} $((${num_gpus} * 4))
 fi
 
-# Prepare noise and rir augmented versions of vox1 dev dataset
-if true; then
-    dataset=voxceleb1_dev
-    musan_root=musan
-    rirs_root=RIRS_NOISES
-    create_augmented_dataset ${dataset} ${musan_root} ${rirs_root}
-fi
-
 # Convert m4a to wav for voxceleb2_dev data
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
     wav_dir=`pwd`/vox2_dev/dev/aac/
@@ -249,6 +241,14 @@ fi
 # Prepare noise and rir augmented versions of vox2 dev dataset
 if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
     dataset=voxceleb2_dev
+    musan_root=musan
+    rirs_root=RIRS_NOISES
+    create_augmented_dataset ${dataset} ${musan_root} ${rirs_root}
+fi
+
+# Prepare noise and rir augmented versions of vox1 dev dataset
+if false; then
+    dataset=voxceleb1_dev
     musan_root=musan
     rirs_root=RIRS_NOISES
     create_augmented_dataset ${dataset} ${musan_root} ${rirs_root}
