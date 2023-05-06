@@ -136,14 +136,14 @@ def main(_):
     EPOCH_SIZE = dataset_length // batch_size // args.num_accumulation_steps
     context = mp.get_context("spawn")
 
-    train_queue = context.Queue(8)
+    train_queue = context.Queue(2)
 
     world_rank = int(os.environ.get('OMPI_COMM_WORLD_RANK',''))
     world_size = int(os.environ.get('OMPI_COMM_WORLD_SIZE',''))
 
-    num_shards = args.num_shards
-    for i in range(num_shards * world_rank, num_shards * (world_rank + 1)):
-        scp_file = '{}-split/feats.{}.scp'.format(num_shards * world_size, i + 1)
+    num_shards_per_rank = args.num_shards_per_rank
+    for i in range(num_shards_per_rank * world_rank, num_shards_per_rank * (world_rank + 1)):
+        scp_file = '{}-split/feats.{}.scp'.format(num_shards_per_rank * world_size, i + 1)
         train_data_process = context.Process(target=get_batch, args=(train_queue, args, scp_file))
         # train_data_process = context.Process(target=get_batch_synthetic, args=(train_queue, args, scp_file))
         train_data_process.daemon = True
@@ -281,8 +281,7 @@ def main(_):
 
     hooks = [
         hvd.BroadcastGlobalVariablesHook(0),
-        # tf.train.LoggingTensorHook(tensors=logging_tensors, every_n_iter=100 * args.num_accumulation_steps),
-        tf.train.LoggingTensorHook(tensors=logging_tensors, every_n_iter=1 * args.num_accumulation_steps),
+        tf.train.LoggingTensorHook(tensors=logging_tensors, every_n_iter=100 * args.num_accumulation_steps),
         # Caution: StopAtStepHook() has different behaviors when running on CPUs and GPUs!
         tf.train.StopAtStepHook(last_step=EPOCH_SIZE * NUM_EPOCHS),
     ]
