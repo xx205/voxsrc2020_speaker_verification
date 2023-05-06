@@ -244,18 +244,18 @@ def conv2d(inputs, filters, kernel_size, strides=1, padding='valid', dilation_ra
 
 
 # Specify the variable scope options
-def stats_pool(inputs, reuse=None, scope=None, data_format='channels_last'):
+def stats_pool(inputs, epsilon=1e-5, reuse=None, scope=None, data_format='channels_last'):
   with tf.variable_scope(name_or_scope=scope, default_name='stats_pool', values=[inputs], reuse=reuse):
     # N H W C    Reduce operation on H
     # 0 1 2 3    Concatenate operation on C
     axis = (1 if data_format == 'channels_last' else 2)
     mean, var = tf.nn.moments(inputs, axes=[axis], keep_dims=True)
-    mean_std = tf.concat([mean, tf.sqrt(var + 1e-5)], 3)
+    mean_std = tf.concat([mean, tf.sqrt(var + epsilon)], 3)
     return mean_std
 
 
 # Specify the variable scope options
-def att_stats_pool(inputs, att_dim=128, trainable=True, att_with_mean_std=True, reuse=None, scope=None, data_format='channels_last'):
+def att_stats_pool(inputs, att_dim=128, epsilon=1e-5, trainable=True, att_with_mean_std=True, reuse=None, scope=None, data_format='channels_last'):
   with tf.variable_scope(name_or_scope=scope, default_name='att_stats_pool', values=[inputs], reuse=reuse):
     time_axis = (1 if data_format == 'channels_last' else 2)
     channel_axis = (3 if data_format == 'channels_last' else 1)
@@ -264,7 +264,7 @@ def att_stats_pool(inputs, att_dim=128, trainable=True, att_with_mean_std=True, 
     mean, var = tf.nn.moments(inputs, axes=[time_axis], keep_dims=True)
 
     if att_with_mean_std:
-      mean_std = tf.concat([mean, tf.sqrt(var + 1e-5)], channel_axis)
+      mean_std = tf.concat([mean, tf.sqrt(var + epsilon)], channel_axis)
       # NHWC
       # multiples = tf.raw_ops.Pack(values=[1, tf.shape(inputs)[time_axis], 1, 1])
       # NCHW
@@ -279,12 +279,12 @@ def att_stats_pool(inputs, att_dim=128, trainable=True, att_with_mean_std=True, 
 
     weights = tf.nn.softmax(
       conv2d(
-        tf.nn.relu(conv2d(att_inputs, filters=att_dim, kernel_size=1, data_format=data_format)),
+        tf.nn.tanh(conv2d(att_inputs, filters=att_dim, kernel_size=1, data_format=data_format)),
         filters=num_channels, kernel_size=1, data_format=data_format), axis=time_axis)
 
     weighted_mean = tf.reduce_sum(inputs * weights, axis=time_axis, keep_dims=True)
     weighted_sum_square = tf.reduce_sum(inputs * inputs * weights, axis=time_axis, keep_dims=True)
-    weighted_std = tf.sqrt(weighted_sum_square - weighted_mean * weighted_mean + 1e-5)
+    weighted_std = tf.sqrt(weighted_sum_square - weighted_mean * weighted_mean + epsilon)
   return tf.concat([weighted_mean, weighted_std], axis=channel_axis)
 
 
