@@ -131,12 +131,15 @@
 | res2net50_w24_s4_c64_voxsrc2020 | cm_linear_voxsrc2020 | ✗         | 320           | (0.2, 0.1) | 26.9 M       | Stats Pool       |
 
 ### Results on VoxCeleb1_Test/Extended/Hard
-|                                          | Vox1_Test<br>(EER/minDCF0.01) | Extended<br>(EER/minDCF0.01) | Hard<br>(EER/minDCF0.01) |
-|------------------------------------------|-------------------------------|------------------------------|--------------------------|
-| dpn68_voxsrc2020 (cosine)                | 0.9517%/0.0884                | 1.0217%/0.1125               | 1.8649%/0.1833           |
-| dpn68_voxsrc2020 (asnorm)                | 0.8347%/0.0879                | 0.9452%/0.0996               | 1.6401%/0.1527           |
-| res2net50_w24_s4_c64_voxsrc2020 (cosine) | 0.9942%/0.1163                | 0.9924%/0.1152               | 1.8387%/0.1857           | 
-| res2net50_w24_s4_c64_voxsrc2020 (asnorm) | 0.8400%/0.0931                | 0.9051%/0.0970               | 1.5976%/0.1471           |
+|                                               | Vox1_Test<br>(EER/minDCF0.01) | Extended<br>(EER/minDCF0.01) | Hard<br>(EER/minDCF0.01) |
+|-----------------------------------------------|-------------------------------|------------------------------|--------------------------|
+| dpn68_voxsrc2020 (cosine)                     | 0.9517%/0.0884                | 1.0217%/0.1125               | 1.8649%/0.1833           |
+| dpn68_voxsrc2020 (asnorm) [^1]                | 0.8347%/0.0879                | 0.9452%/0.0996               | 1.6401%/0.1527           |
+| res2net50_w24_s4_c64_voxsrc2020 (cosine)      | 0.9942%/0.1163                | 0.9924%/0.1152               | 1.8387%/0.1857           | 
+| res2net50_w24_s4_c64_voxsrc2020 (asnorm) [^2] | 0.8400%/0.0931                | 0.9051%/0.0970               | 1.5976%/0.1471           |
+
+[^1]: DPN68 model with B+α+1 configuration (https://arxiv.org/pdf/2011.00200.pdf)
+[^2]: Res2Net50 model with B+α+5 configuration (https://arxiv.org/pdf/2011.00200.pdf)
 
 ## 3. VoxCeleb2_dev_aug as training data, 40-d FBANK features, LMFT on VoxCeleb2_dev
 
