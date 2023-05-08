@@ -32,7 +32,7 @@
 
 * Adaptive symmetric normalization (asnorm) on cosine scores
 
-* ***Quality measure function (QMF) is not applied***
+* ***Quality measure function (QMF) or score calibration is not applied***
 
 # Experiments
 
