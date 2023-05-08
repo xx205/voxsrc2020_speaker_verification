@@ -2,13 +2,13 @@
 
 ## Data preparation
 
-* Training data are prepared following Kaldi voxceleb recipe, VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets.
+* Training data are prepared following Kaldi voxceleb recipe, VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
 
-* 40-dimensional (or 80-dimensional) FBANKs are extracted.
+* 40-dimensional (or 80-dimensional) FBANKs are extracted
 
-* ***Speaker augmentation is not applied***.
+* ***Speaker augmentation is not applied***
 
-* ***Online data augmentation is not applied***.
+* ***Online data augmentation is not applied***
 
 ## Models
 
@@ -18,21 +18,21 @@
 
 ## Training
 
-* Margin based (AAM-softmax, CM-softmax) loss functions.
+* [Margin based (AAM-softmax, CM-softmax) loss functions](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf)
 
-* Scheduled learning rate and margin adjustments.
+* [Scheduled learning rate and margin adjustments](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf)
 
-* Large margin finetuning (LMFT).
+* Large margin finetuning (LMFT)
 
-* Mixed precision training and distributed training.
+* Mixed precision training and distributed training
 
 ## Scoring
 
-* Cosine similarity scoring.
+* Cosine similarity scoring
 
-* Adaptive symmetric normalization (asnorm) on cosine scores.
+* Adaptive symmetric normalization (asnorm) on cosine scores
 
-* ***Quality measure function (QMF) is not applied***.
+* ***Quality measure function (QMF) is not applied***
 
 # Experiments
 
