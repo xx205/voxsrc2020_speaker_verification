@@ -1,5 +1,7 @@
 # Overview
 
+This project only partially reflects the best practices in speaker verification technology up till 2020.
+
 ## Data preparation
 
 * Training data are prepared following Kaldi voxceleb recipe, VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
