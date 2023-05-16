@@ -2,6 +2,8 @@
 
 This project only partially reflects the best practices in speaker verification technology up till 2020.
 
+[The VoxSRC Workshop 2020](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/interspeech2020.html)
+
 ## Data preparation
 
 * Training data are prepared following Kaldi voxceleb recipe, VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
