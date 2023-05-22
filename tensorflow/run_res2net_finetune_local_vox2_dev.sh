@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ../global_config.sh
+
 model_source=${1:-"models.res2net_model"}
 model_id=${2:-'res2net50_w24_s4_c64'}
 expansion_dim=${3:-3}
@@ -16,16 +18,16 @@ dataset=voxceleb2_dev_aug
 dataset_length=$((1092009 * 5))
 num_classes=5994
 frames=200
-fbank_dim=40
+# feat_dim=80
 
-num_gpus=`nvidia-smi -L | wc -l`
+# num_gpus=`nvidia-smi -L | wc -l`
 
 pretrain_exp_dir="exp/${dataset}/${model_id}_${projection_id}_frames${frames}_scale${scale}_margin${margin}_${num_gpus}GPUs"
 
 # finetune model with
 dataset=voxceleb2_dev
-batch_size=8
-num_accumulation_steps=16
+batch_size=16
+num_accumulation_steps=8
 margin=0.4
 frames=600
 total_epochs=24
@@ -49,7 +51,7 @@ bash ./run_tf_train_local.sh tf_train_tdnn.py \
     ${projection_id} \
     ${scale} \
     ${margin} \
-    ${fbank_dim} \
+    ${feat_dim} \
     ${frames} \
     160 \
     10000 \

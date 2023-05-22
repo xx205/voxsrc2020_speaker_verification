@@ -1,13 +1,16 @@
 #!/bin/bash
 
+. ../global_config.sh
+
 # set -xe
 module_source=${1:-"models.tdnn_model"}
 model_id=${2:-"tdnn"}
 saved_directory=${3:-"exp/voxceleb2_dev/tdnn_length320_cm_linear_voxsrc2020_scale32.0_margin0.2_8GPUs"}
 # expansion_dim is 2 for 1D conv model (e.g. TDNN), 3 for 2D conv model (e.g. Res2Net)
 expansion_dim=${4:-2}
-feat_dim=${5:-40}
-projection_name=${6:-"cm_linear_voxsrc2020/kernel"}
+# feat_dim=${5:-80}
+projection_name=${5:-"cm_linear_voxsrc2020/kernel"}
+
 
 # export inference graph
 python3 export_inference_graph.py --module_source $module_source \

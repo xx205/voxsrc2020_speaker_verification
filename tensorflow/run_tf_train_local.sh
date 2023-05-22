@@ -2,10 +2,12 @@
 
 set -xe
 
+. ../global_config.sh
+
 hosts=localhost
 # num_gpus=8
 # Number of GPUs for training and evaluation
-num_gpus=`nvidia-smi -L | wc -l`
+# num_gpus=`nvidia-smi -L | wc -l`
 
 uuid=`python3 -c 'import uuid; print(uuid.uuid4())'`
 hostfile=/tmp/hostfile-${uuid}
@@ -19,7 +21,7 @@ do
     np=$(($np + $num_gpus))
 done
 
-data_dir="${np}-gpu"
+# data_dir="${np}-gpu"
 
 i=0
 echo "running..."

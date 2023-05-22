@@ -1,10 +1,12 @@
 #!/bin/bash
 
+. ../global_config.sh
+
 model=${1:-"exp/voxceleb2_dev/tdnn_length320_cm_linear_voxsrc2020_scale32.0_margin0.2_8GPUs_122636.pb"}
 expansion_dim=${2:-2}
 
 # Number of GPUs for training and evaluation
-num_gpus=`nvidia-smi -L | wc -l`
+# num_gpus=`nvidia-smi -L | wc -l`
 
 dir=`pwd`/${model%.pb}_embeddings
 

@@ -1,10 +1,10 @@
 # Overview
 
-## Data preparation
+## Data
 
-* Training data are prepared following Kaldi voxceleb recipe, VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
+* Training data are prepared following Kaldi voxceleb recipe: VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
 
-* 40-dimensional (or 80-dimensional) FBANKs are extracted
+* 80-dimensional (or 40-dimensional) FBANKs are extracted
 
 * ***Speaker augmentation is not applied***
 
@@ -42,69 +42,125 @@
 
 * or setup a docker container with Dockerfile (recommended):
 
-    ``docker build -t nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi .``
+    ```bash
+    docker build -t nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi .
+    ```
     
 * or pull the container directly (recommended):
     
-    ``docker pull xx205/ngc_tf1``
+    ```bash
+    docker pull xx205/ngc_tf1
+    ```
 
-## Data generation
+## Data preparation
 
-* Run docker container first: 
+* Run docker container:
 
-    ``docker run --rm -it --gpus device=all -v `pwd`:`pwd` --ipc=host --ulimit memlock=-1 nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi``
+    ```bash
+    docker run --rm -it --gpus device=all -v `pwd`:`pwd` --ipc=host --ulimit memlock=-1 nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi
+    ```
 
 * Clone this repository:
 
-    ``git clone https://github.com/xx205/voxsrc2020_speaker_verification``
+    ```bash
+    git clone https://github.com/xx205/voxsrc2020_speaker_verification
+    ```
 
-* Run data preparation script (40-dimensional FBANKs are extracted by default): 
+* Run data preparation script (note, 80-dimensional FBANKs are extracted by default. FBANK dimension can be set in global_config.sh):
 
-    ``cd voxsrc2020_speaker_verification``
+    ```bash
+    cd voxsrc2020_speaker_verification
     
-    ``bash prepare_data.sh``
+    bash prepare_data.sh
+    ```
 
 ## Model training
 
 * Go to working directory: 
 
-    ``cd tensorflow``
+    ```bash
+    cd tensorflow
+    ```
 
+<!--
 * Train a TDNN model with xx205's VoxSRC2020 setup on VoxCeleb2_dev_aug training set: 
 
     ``bash run_tdnn_local_voxsrc2020_vox2_dev_aug.sh``
 
 * Export trained checkpoint to pb file for inference: 
 
-    ``bash export_inference_model.sh models.tdnn_model tdnn exp/voxceleb2_dev_aug/tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs 2 40 cm_linear_voxsrc2020/kernel``
+    ``bash export_inference_model.sh models.tdnn_model tdnn exp/voxceleb2_dev_aug/tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs 2 cm_linear_voxsrc2020/kernel``
 
 * Evaluate trained TDNN model performance on VoxCeleb1 Test/Extended/Hard trials: 
 
     ``bash eval_inference_model.sh exp/voxceleb2_dev_aug/tdnn_cm_linear_voxsrc2020_frames320_scale32_margin0.2_8GPUs_122636.pb 2``
+-->
 
 * Train a Res2Net model with JTBD's VoxSRC2020 setup on VoxCeleb2_dev_aug training set:
 
-    ``bash run_res2net_local_vox2_dev_aug.sh models.res2net_model res2net50_w24_s4_c64``
+    ```bash
+    bash run_res2net_local_vox2_dev_aug.sh models.res2net_model res2net50_w24_s4_c32
+    ```
 
 * Export trained checkpoint to pb file for inference:
 
-    ``bash export_inference_model.sh models.res2net_model res2net50_w24_s4_c64 exp/voxceleb2_dev_aug/res2net50_w24_s4_c64_sc_cm_linear_frames200_scale32_margin0.2_8GPUs 3 40 sc_cm_linear/kernel``
+    ```bash
+    bash export_inference_model.sh \
+        models.res2net_model \
+        res2net50_w24_s4_c32 \
+        exp/voxceleb2_dev_aug/res2net50_w24_s4_c32_sc_cm_linear_frames200_scale32_margin0.2_8GPUs \
+        3 \
+        sc_cm_linear/kernel
+    ```
 
 * Evaluate trained Res2Net model performance on VoxCeleb1 Test/Extended/Hard trials:
 
-    ``bash eval_inference_model.sh exp/voxceleb2_dev_aug/res2net50_w24_s4_c64_sc_cm_linear_frames200_scale32_margin0.2_8GPUs_122636.pb 3``
+    ```bash
+    export saved_model=exp/voxceleb2_dev_aug/res2net50_w24_s4_c32_sc_cm_linear_frames200_scale32_margin0.2_8GPUs_122636.pb
+
+    bash eval_inference_model.sh ${saved_model} 3
+
+    for partition in T E H; do
+        for approach in cosine snorm; do
+            python3 eer_minDCF.py \
+                --trial ../data/voxceleb1_trials/list_test_${partition}.txt \
+                --score ${saved_model%.pb}_embeddings/voxceleb1/${approach}_${partition}.txt
+        done
+    done
+    ```
 
 * Finetune the Res2Net model with LMFT on VoxCeleb2_dev training set:
 
-    ``bash run_res2net_finetune_local_vox2_dev.sh models.res2net_model res2net50_w24_s4_c64``
+    ```bash
+    bash run_res2net_finetune_local_vox2_dev.sh models.res2net_model res2net50_w24_s4_c32
+    ```
 
 * Export finetuned checkpoint to pb file for inference:
 
-    ``bash export_inference_model.sh models.res2net_model res2net50_w24_s4_c64 exp/voxceleb2_dev/res2net50_w24_s4_c64_sc_cm_linear_frames600_scale32_margin0.4_8GPUs 3 40 sc_cm_linear/kernel``
+    ```bash
+    bash export_inference_model.sh \
+        models.res2net_model \
+        res2net50_w24_s4_c32 \
+        exp/voxceleb2_dev/res2net50_w24_s4_c32_sc_cm_linear_frames600_scale32_margin0.4_8GPUs \
+        3 \
+        sc_cm_linear/kernel
+    ```
 
 * Evaluate finetuned Res2Net model performance on VoxCeleb1 Test/Extended/Hard trials:
 
-    ``bash eval_inference_model.sh exp/voxceleb2_dev/res2net50_w24_s4_c64_sc_cm_linear_frames600_scale32_margin0.4_8GPUs_127968.pb 3``
+    ```bash
+    export saved_model=exp/voxceleb2_dev/res2net50_w24_s4_c32_sc_cm_linear_frames600_scale32_margin0.4_8GPUs_127968.pb
+
+    bash eval_inference_model.sh ${saved_model} 3
+
+    for partition in T E H; do
+        for approach in cosine snorm; do
+            python3 eer_minDCF.py \
+                --trial ../data/voxceleb1_trials/list_test_${partition}.txt \
+                --score ${saved_model%.pb}_embeddings/voxceleb1/${approach}_${partition}.txt
+        done
+    done
+    ```
 
 # Results
 
@@ -117,10 +173,10 @@
 | dpn68_voxsrc2020          | cm_linear_voxsrc2020 | ✗         | 320           | (0.2, 0.1) | 13.9 M       | Stats Pool       |
 
 ### Results on VoxCeleb1_Test
-|                           | Vox1_Test (EER/minDCF0.01) | 
-|---------------------------|----------------------------|
-| tdnn_voxsrc2020 (cosine)  | 3.4398%/0.3339             |
-| dpn68_voxsrc2020 (cosine) | 2.0894%/0.2544             |
+|                           | Vox1_Test<br>(EER/minDCF0.01) |
+|---------------------------|-------------------------------|
+| tdnn_voxsrc2020 (cosine)  | 3.4398%/0.3339                |
+| dpn68_voxsrc2020 (cosine) | 2.0894%/0.2544                |
 
 ## 2. VoxCeleb2_dev_aug as training data, 40-d FBANK features
 

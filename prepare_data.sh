@@ -1,14 +1,16 @@
 #!/bin/bash
 set -xe
 
+. ./global_config.sh
+
 stage=1
 stop_stage=100
 
-# FBANK features are 40-dimensional
-fbank_dim=40
+# FBANK feature dim
+# feat_dim=80
 
 # Number of GPUs for training and evaluation
-num_gpus=`nvidia-smi -L | wc -l`
+# num_gpus=`nvidia-smi -L | wc -l`
 
 # Utility function for sharding scp
 shard_scp() {
@@ -16,7 +18,7 @@ shard_scp() {
     N=$2
 
     mkdir -p data/${dataset}/${N}-split
-    ./utils/split_scp.pl data/${dataset}/fbank${fbank_dim}.scp `eval echo data/${dataset}/${N}-split/feats.{1..${N}}.scp`
+    ./utils/split_scp.pl data/${dataset}/fbank${feat_dim}.scp `eval echo data/${dataset}/${N}-split/feats.{1..${N}}.scp`
 }
 
 # Utility function for creating dataset
@@ -24,7 +26,8 @@ create_dataset() {
     wav_dir=$1
     dataset=$2
 
-    N=24 # Or, use all CPU cores with N=`getconf _NPROCESSORS_ONLN`
+    # N=24 # Or, use all CPU cores with N=`getconf _NPROCESSORS_ONLN`
+    N=`getconf _NPROCESSORS_ONLN`
 
     mkdir -p data/${dataset}
 
@@ -47,13 +50,13 @@ create_dataset() {
     # Extract fbank features from wav scp
     for i in `seq 1 ${N}`; do
 	dir=`pwd`/data/${dataset}/split${N}/$i
-        compute-fbank-feats --config=conf/fbank${fbank_dim}.conf --write-utt2dur=ark,t:${dir}/utt2dur scp:${dir}/wav.scp.shuf ark:- | \
-	    copy-feats --compress ark:- ark,scp:${dir}/fbank${fbank_dim}.ark,${dir}/fbank${fbank_dim}.scp > /tmp/$i.log 2>&1 &
+        compute-fbank-feats --config=conf/fbank${feat_dim}.conf --write-utt2dur=ark,t:${dir}/utt2dur scp:${dir}/wav.scp.shuf ark:- | \
+	    copy-feats --compress ark:- ark,scp:${dir}/fbank${feat_dim}.ark,${dir}/fbank${feat_dim}.scp > /tmp/$i.log 2>&1 &
     done
     wait
 
     # Get final fbank scp and utt2dur
-    cat `eval echo data/${dataset}/split${N}/{1..${N}}/fbank${fbank_dim}.scp` > data/${dataset}/fbank${fbank_dim}.scp
+    cat `eval echo data/${dataset}/split${N}/{1..${N}}/fbank${feat_dim}.scp` > data/${dataset}/fbank${feat_dim}.scp
     cat `eval echo data/${dataset}/split${N}/{1..${N}}/utt2dur` > data/${dataset}/utt2dur
 
     # Get spk list
@@ -73,7 +76,8 @@ create_augmented_dataset() {
     musan_root=$2
     rirs_root=$3
 
-    N=24 # Or, use all CPU cores with N=`getconf _NPROCESSORS_ONLN`
+    # N=24 # Or, use all CPU cores with N=`getconf _NPROCESSORS_ONLN`
+    N=`getconf _NPROCESSORS_ONLN`
 
     # Generate utt2num_frames
     frame_shift=0.01
@@ -141,13 +145,13 @@ create_augmented_dataset() {
     # Extract fbank features from augmented wav scp
     for i in `seq 1 ${N}`; do
 	dir=`pwd`/data/${dataset}/split${N}/$i
-        compute-fbank-feats --config=conf/fbank${fbank_dim}.conf scp:data/${dataset}/split${N}/$i/wav.scp.shuf ark:- | \
-	    copy-feats --compress ark:- ark,scp:${dir}/fbank${fbank_dim}.ark,${dir}/fbank${fbank_dim}.scp > /tmp/$i.log 2>&1 &
+        compute-fbank-feats --config=conf/fbank${feat_dim}.conf scp:data/${dataset}/split${N}/$i/wav.scp.shuf ark:- | \
+	    copy-feats --compress ark:- ark,scp:${dir}/fbank${feat_dim}.ark,${dir}/fbank${feat_dim}.scp > /tmp/$i.log 2>&1 &
     done
     wait
 
     # Get final fbank scp
-    cat `eval echo data/${dataset}/split${N}/{1..${N}}/fbank${fbank_dim}.scp` > data/${dataset}/fbank${fbank_dim}.scp
+    cat `eval echo data/${dataset}/split${N}/{1..${N}}/fbank${feat_dim}.scp` > data/${dataset}/fbank${feat_dim}.scp
 
     # Get spk list
     awk '{print $2}' data/${dataset}/utt2spk | sort | uniq > data/${dataset}/spk
@@ -216,7 +220,7 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
 
     dataset=voxceleb1
     utils/combine_data.sh data/${dataset} data/voxceleb1_dev data/voxceleb1_test
-    cat data/voxceleb1_dev/fbank${fbank_dim}.scp data/voxceleb1_test/fbank${fbank_dim}.scp > data/${dataset}/fbank${fbank_dim}.scp
+    cat data/voxceleb1_dev/fbank${feat_dim}.scp data/voxceleb1_test/fbank${feat_dim}.scp > data/${dataset}/fbank${feat_dim}.scp
 
     # Shard wav scp
     shard_scp ${dataset} ${num_gpus}
