@@ -53,7 +53,11 @@ This project only partially reflects the best practices in speaker verification 
 * or pull the container directly (recommended):
     
     ```bash
-    docker pull xx205/ngc_tf1
+    docker pull xx205/ngc_tf1:23.02-tf1-py3-kaldi
+
+    docker tag xx205/ngc_tf1:23.02-tf1-py3-kaldi nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi
+
+    docker rmi xx205/ngc_tf1:23.02-tf1-py3-kaldi
     ```
 
 ## Data preparation
