@@ -255,6 +255,12 @@ res2net50_w24_s4_c32 = Model(resnet_size=50, bottleneck=True, num_filters=[32, 6
                              resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
                              temporal_pool=stats_pool)
 
+res2net50_w8_s6_c16 = Model(resnet_size=50, bottleneck=True, num_filters=[16, 32, 64, 128], output_dim=192,
+                            kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
+                            block_sizes=[3,4,6,3], block_strides=[1,2,2,2],
+                            resnet_version=1, data_format='channels_last', split=6, width=[8, 16, 32, 64],
+                            temporal_pool=stats_pool)
+
 res2net101_w24_s4_c32_att = Model(resnet_size=101, bottleneck=True, num_filters=[32, 64, 128, 256], output_dim=256,
                                   kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
                                   block_sizes=[3,4,23,3], block_strides=[1,2,2,2],
