@@ -96,6 +96,6 @@ mpirun --allow-run-as-root \
        --num_shards_per_rank ${num_shards_per_rank} \
        --num_accumulation_steps $num_accumulation_steps \
        --total_epochs $total_epochs \
-       --exp_dir $exp_dir
+       --exp_dir $exp_dir \
        --uuid $uuid
 wait
