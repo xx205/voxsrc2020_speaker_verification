@@ -47,17 +47,13 @@ This project only partially reflects the best practices in speaker verification 
 * or setup a docker container with Dockerfile (recommended):
 
     ```bash
-    docker build -t nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi .
+    docker build -t xx205/tensorflow:23.03-tf1-py3-kaldi -f Dockerfile .
     ```
     
 * or pull the container directly (recommended):
     
     ```bash
-    docker pull xx205/ngc_tf1:23.02-tf1-py3-kaldi
-
-    docker tag xx205/ngc_tf1:23.02-tf1-py3-kaldi nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi
-
-    docker rmi xx205/ngc_tf1:23.02-tf1-py3-kaldi
+    docker pull xx205/tensorflow:23.03-tf1-py3-kaldi
     ```
 
 ## Data preparation
@@ -65,7 +61,7 @@ This project only partially reflects the best practices in speaker verification 
 * Run docker container:
 
     ```bash
-    docker run --rm -it --gpus device=all -v `pwd`:`pwd` --ipc=host --ulimit memlock=-1 nvcr.io/nvidia/tensorflow:23.02-tf1-py3-kaldi
+    docker run --rm -it --gpus device=all -v `pwd`:`pwd` --ipc=host --ulimit memlock=-1 xx205/tensorflow:23.03-tf1-py3-kaldi
     ```
 
 * Clone this repository:
