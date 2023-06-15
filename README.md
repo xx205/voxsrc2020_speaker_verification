@@ -1,48 +1,54 @@
 # Overview
 
-This project only partially reflects the best practices in speaker verification technology up till 2020.
+This project partially reflects the best practices in speaker verification technology up till 2020. 
 
-[The VoxSRC Workshop 2020](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/interspeech2020.html)
+For more details, please refer to the link: [The VoxSRC Workshop 2020](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/interspeech2020.html).
 
 ## Data
 
-* Training data are prepared following Kaldi voxceleb recipe: VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets
+* Training data are prepared following Kaldi voxceleb recipe: VoxCeleb2_dev and its four augmented versions are generated using RIRS_NOISES and MUSAN datasets.
 
-* 80-dimensional (or 40-dimensional) FBANKs are extracted
+* 80-dimensional (or 40-dimensional) FBANKs are extracted.
 
-* ***Speaker augmentation is not applied***
+* ***Speaker augmentation is not applied.***
 
-* ***Online data augmentation is not applied***
+* ***Online data augmentation is not applied.***
 
 ## Models
 
-* 1D-conv model: 512-d TDNN model following Kaldi voxceleb recipe
+* 1D-conv model: 512-d TDNN model following Kaldi voxceleb recipe.
 
-* 2D-conv models: Res2Net model and DPN (Dual Path Networks) model 
+* 2D-conv models: Res2Net model and DPN (Dual Path Networks) model.
 
 ## Training
 
-* [Margin based (AAM-softmax, CM-softmax) loss functions](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf)
+* [Margin based (AAM-softmax, CM-softmax) loss functions](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf).
 
-* [Scheduled learning rate and margin adjustments](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf)
+* [Scheduled learning rate and margin adjustments](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/data_workshop_2020/participants/xx205.pdf).
 
-* Large margin finetuning (LMFT)
+* Large margin finetuning (LMFT).
 
-* Mixed precision training and distributed training
+* Mixed precision training and distributed training.
 
 ## Scoring
 
-* Cosine similarity scoring
+* Cosine similarity scoring.
 
-* Adaptive symmetric normalization (asnorm) on cosine scores
+* Adaptive symmetric normalization (asnorm) on cosine scores.
 
-* ***Quality measure function (QMF) or score calibration is not applied***
+* ***Quality measure function (QMF) or score calibration is not applied.***
+
+## Notes
+
+* Data preparation takes a long time. It is recommended to run data preparation script on a server. With a D48s_v5 Virtual Machine on Azure (48 vCPUs, 192 GB memory), it takes about 10 hours to complete the whole process.
+
+* For the smallest Res2Net model, res2net50_w8_s6_c16, it takes about 52 hours to train the model on a single NVIDIA Geforce RTX 4090 GPU.
 
 # Experiments
 
 ## Environment setup
 
-* Install TensorFlow 1.x and Kaldi manually
+* Install TensorFlow 1.x and Kaldi toolkit manually
 
 * or setup a docker container with Dockerfile (recommended):
 
@@ -232,6 +238,8 @@ This project only partially reflects the best practices in speaker verification 
 | res2net50_w24_s4_c64+LMFT      | sc_cm_linear  | ✓         | 600           | 0.4        | 32.2 M       | Stats Pool       |
 | res2net50_w24_s4_c32           | sc_cm_linear  | ✓         | 200           | 0.2        | 17.7 M       | Stats Pool       |
 | res2net50_w24_s4_c32+LMFT      | sc_cm_linear  | ✓         | 600           | 0.4        | 17.7 M       | Stats Pool       |
+| res2net50_w8_s6_c16            | sc_cm_linear  | ✓         | 200           | 0.2        | 4.8 M        | Stats Pool       |
+| res2net50_w8_s6_c16+LMFT       | sc_cm_linear  | ✓         | 600           | 0.4        | 4.8 M        | Stats Pool       |
 | res2net101_w24_s4_c32_att      | sc_cm_linear  | ✓         | 200           | 0.2        | 29.3 M       | Att Stats Pool   |
 | res2net101_w24_s4_c32_att+LMFT | sc_cm_linear  | ✓         | 600           | 0.4        | 29.3 M       | Att Stats Pool   |
 | res2net152_w24_s4_c32_att      | sc_cm_linear  | ✓         | 200           | 0.2        | 32.9 M       | Att Stats Pool   |
@@ -250,6 +258,10 @@ This project only partially reflects the best practices in speaker verification 
 | res2net50_w24_s4_c32 (asnorm)           | 0.7018%/0.0673                | 0.9062%/0.0986               | 1.5860%/0.1466           | |
 | res2net50_w24_s4_c32+LMFT (cosine)      | 0.6327%/0.0622                | 0.8500%/0.0937               | 1.5352%/0.1549           | |
 | res2net50_w24_s4_c32+LMFT (asnorm)      | 0.5529%/0.0625                | 0.8003%/0.0820               | 1.3751%/0.1271           | |
+| res2net50_w8_s6_c16 (cosine)            | 1.0474%/0.1133                | 1.1721%/0.1288               | 2.0929%/0.2074           | |
+| res2net50_w8_s6_c16 (asnorm)            | 0.9889%/0.1024                | 1.0659%/0.1164               | 1.8627%/0.1777           | |
+| res2net50_w8_s6_c16+LMFT (cosine)       | 0.8666%/0.0839                | 0.9772%/0.1019               | 1.7360%/0.1678           | |
+| res2net50_w8_s6_c16+LMFT (asnorm)       | 0.7869%/0.0821                | 0.8903%/0.0917               | 1.5370%/0.1414           | |
 | res2net101_w24_s4_c32_att (cosine)      | 0.6539%/0.0655                | 0.7837%/0.0823               | 1.4125%/0.1395           | |
 | res2net101_w24_s4_c32_att (asnorm)      | 0.5742%/0.0664                | 0.7230%/0.0749               | 1.2679%/0.1187           | |
 | res2net101_w24_s4_c32_att+LMFT (cosine) | 0.5795%/0.0512                | 0.6526%/0.0677               | 1.2099%/0.1174           | |
