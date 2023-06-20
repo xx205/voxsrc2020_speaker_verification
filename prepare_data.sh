@@ -193,15 +193,16 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     # voxceleb audio data can be downloaded from the URL:
     # https://mm.kaist.ac.kr/datasets/voxceleb/#downloads
     if [ ! -e vox1_dev_wav.zip ] || [ ! -e vox1_test_wav.zip ] || [ ! -e vox2_aac.zip ]; then
-        echo "One or more files do not exist: vox1_dev_wav.zip, vox1_test_wav.zip, vox2_aac.zip"
-        echo "You can donwload them from https://mm.kaist.ac.kr/datasets/voxceleb/#downloads"
-        exit
+        cat ./download_vox.sh | xargs -P 8 -i sh -c "{}"
+        cat vox1_dev_wav_parta{a..d} > vox1_dev_wav.zip
+        cat vox2_dev_aac_parta{a..h} > vox2_aac.zip
+        md5sum -c md5sum.txt
     fi
     unzip vox1_dev_wav.zip -d vox1_dev
     unzip vox1_test_wav.zip -d vox1_test
     unzip vox2_aac.zip -d vox2_dev
 
-    # Predicate: VoxCeleb1 Test, Extended and Hard trials are downloaded
+    # Predicate: VoxCeleb1 Test, Extended and Hard trials are downloaded to current directory
     dataset=voxceleb1
     mkdir -p data/${dataset}_trials
     wget https://mm.kaist.ac.kr/datasets/voxceleb/meta/veri_test2.txt -O data/${dataset}_trials/list_test_T.txt
