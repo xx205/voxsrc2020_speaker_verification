@@ -42,7 +42,9 @@ For more details, please refer to the link: [The VoxSRC Workshop 2020](https://w
 
 * Data preparation takes a long time. It is recommended to run data preparation script on a server. With a D48s_v5 Virtual Machine on Azure (48 vCPUs, 192 GB memory), it takes about 10 hours to complete the whole process.
 
-* For the smallest Res2Net model, res2net50_w8_s6_c16, it takes about 52 hours to train the model on a single NVIDIA Geforce RTX 4090 GPU.
+* For the smallest Res2Net model, res2net50_w8_s6_c16, it takes about 52 + 5 hours to train the model on a single NVIDIA Geforce RTX 4090 GPU.
+
+* For the largest Res2Net model, res2net200_w8_s6_c16, it takes about 76 + 8 hours to train the model on eight NVIDIA Geforce RTX 3090 GPUs.
 
 # Experiments
 
