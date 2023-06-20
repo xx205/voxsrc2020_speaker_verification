@@ -278,9 +278,3 @@ res2net200_w24_s4_c32_att = Model(resnet_size=200, bottleneck=True, num_filters=
                                   block_sizes=[3,24,36,3], block_strides=[1,2,2,2],
                                   resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
                                   temporal_pool=att_stats_pool)
-
-res2net272_w24_s4_c32_att = Model(resnet_size=272, bottleneck=True, num_filters=[32, 64, 128, 256], output_dim=256,
-                                  kernel_size=3, conv_stride=1, first_pool_size=None, first_pool_stride=None,
-                                  block_sizes=[4,29,53,4], block_strides=[1,2,2,2],
-                                  resnet_version=1, data_format='channels_last', split=4, width=[24, 48, 96, 192],
-                                  temporal_pool=att_stats_pool)
